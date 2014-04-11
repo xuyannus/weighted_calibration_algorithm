@@ -1,0 +1,11 @@
+#The first thing to do is to copy different DynaMIT
+#Please use xterm because it can be opened to many
+
+octave
+
+copy_prototype(1,2,3)
+
+#next, write the logfile
+#num, start, duration
+
+#last, run estimateWh.m

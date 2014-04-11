@@ -1,0 +1,139 @@
+# This file contains the value of the parameters for behavior model.
+
+[Habitual]
+bTTlowVOT	=	-0.108879
+bTTmedVOT	=	-0.108879
+bTThiVOT	=	-0.108879
+
+
+
+ bCommonFactor =  1
+ bLength       =  0
+ bHighway      =  0
+ bCost         =  0
+ bSigInter     =  0
+ bLeftTurns    =  0
+ bWork         =  0
+ bLeisure      =  0
+
+[PreTrip]
+
+                                    # Alternative specific constants
+
+ ascDNC   = 0
+                                    # Not included in Eq. (3.4) in Task D
+                                    # report because supposed to be
+                                    # zero. Included here for flexibility
+                                    # purposes
+
+ ascM = -100               # Rama: Change mode, originally set to zero
+
+                                    # We assume here that the departure
+                                    # intervals are h, h-1, h-2, h+1 and h+2,
+                                    # where h is the current time interval.
+                                    # They are coded h, hm1, hm2, hp1 and hp2.
+                                    # Equation (3.8) 
+
+ ascCDThm1 = -100 # was 1.95
+ ascCDThm2 = -100 # was 2.1377
+ ascCDThp1 = -100 # was 0.794
+ ascCDThp2 = -100 # was 0.0221
+ ascCDTrh = 1.267
+ ascCDTrhm1 = 1.9906
+ ascCDTrhm2 = 2.404
+ ascCDTrhp1 = 0.84225
+ ascCDTrhp2 = 0.0157
+ ascCT = -100              # Rama: Cancel Trip. Originally was 0.14204
+                                    # Beta parameters
+
+ bTTlowVOT = -0.01
+ bTTmedVOT = -0.01
+ bTThiVOT = -0.01
+ bCommonFactor = 0
+ bLength       = 0
+ bHighway      = 0
+ bCost         = 0
+ bSigInter     = 0
+ bLeftTurns    = 0
+ bOldInfo      = 0         # Rama: Originally was 0.0389
+                                    # Equation (3.6)
+ bEarlyArrival = 0.0060
+ bLateArrival  = -0.1197
+ bWork         = 0
+ bLeisure      = 0
+ bInVehicle    = 0
+ bVMS          = 0
+ bOtherInfo    = 0
+ bInVehVMS     = 0
+ bInVehOther   = 0
+ bVMSother     = 0
+                                    # Theta
+	                            # These parameters are not used in the
+                                    # current implementation
+ thetaDT       = 1.0
+ thetaP        = 1.0
+ thetaDTP      = 1.0
+ thetaC        = 1.0
+
+[EnRoutePresc]
+
+ ascDNC = 0
+
+ bTTlowVOT = -0.00118
+ bTTmedVOT = -0.00187
+ bTThiVOT = -0.00246
+ bCommonFactor = 0
+ bLength       = 0
+ bHighway      = 0
+ bCost         = 0
+ bSigInter     = 0
+ bLeftTurns    = 0
+
+ bEarlyArrival = 0.0060
+ bLateArrival  = -0.1197
+ bWork         = 0
+ bLeisure      = 0
+ bInVehicle    = 0
+ bVMS          = 0
+ bOtherInfo    = 0
+ bInVehVMS     = 0
+ bInVehOther   = 0
+ bVMSother     = 0
+
+[EnRouteDesc]
+
+ ascDNC = 0 
+
+ bTTlowVOT = -0.0118
+ bTTmedVOT = -0.0187
+ bTThiVOT = -0.0246
+ bCommonFactor = 0
+ bLength       = 0
+ bHighway      = 0
+ bCost         = 0
+ bSigInter     = 0
+ bLeftTurns    = 0
+
+ bEarlyArrival = 0.0060
+ bLateArrival  = -0.1197
+ bWork         = 0
+ bLeisure      = 0
+ bInVehicle    = 0
+ bVMS          = 0
+ bOtherInfo    = 0
+ bInVehVMS     = 0
+ bInVehOther   = 0
+ bVMSother     = 0
+
+ bHabRoute     = 0
+
+
+
+
+
+
+
+
+
+
+

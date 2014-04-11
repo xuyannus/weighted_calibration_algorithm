@@ -1,0 +1,123 @@
+ 
+//This ﬁle contains the inverse of the variance-covariance matrices Vh and Wh
+//used by the OD estimation module (refer to the report titled Development
+//of a Deployable Real-Time Dynamic Traﬃc Assignment System. Part A:
+//Evaluation of Estimation and Prediction Capabilities for a detailed overview
+//of the OD estimation module). The name of this ﬁle has been hard-coded.
+//It should reside in the directory from which DynaMIT will be executed.
+
+//sample
+//1 3 2 4 2 1 6 1 2 4 3 8 3 4 9 10 2 1
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+1.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0
+0
+0
+
+
+//The entries specify the weights associated with the measurement errors
+//in the sensor counts and historical OD ﬂow estimates. The number of entries
+//in the ﬁle is the sum of
+//1. the number of sensors on the network, and
+//2. the number of O-D pairs.
+
+//The ﬁrst set of numbers (as many as the number of sensors) form the di-
+//agonal of the counts weighting matrix. The second set of numbers (as many
+//as the number of OD pairs) forms the diagonal of the OD ﬂows matrix.

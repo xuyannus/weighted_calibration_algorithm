@@ -1,0 +1,11 @@
+cd DynaMIT
+./backupToDir
+cd ..
+
+cd results
+rm *.dat
+cd ..
+
+cd parameter_record
+rm -r gl*
+cd ..

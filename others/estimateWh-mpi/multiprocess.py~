@@ -1,0 +1,40 @@
+#This code will activate multi DynaMIT to do the estimation, it will save time.
+#By MaWei,22.08.2013
+#Recommend : set the number of process as the cores your computer owns.
+
+from multiprocessing import Process
+import os
+
+num_process = 2;
+iteration =100;
+iteration_per_process = iteration / num_process
+
+def write_file(cur_num, start, iteration_per_process):
+    fileHandle = open ( 'logfile.dat', 'w' ) 
+    cur_num_str = str(cur_num)
+    start_str = str(start)
+    iteration_per_process_str= str(iteration_per_process)
+    fileHandle.write(cur_num_str+'\n')
+    fileHandle.write(start_str+'\n')
+    fileHandle.write(iteration_per_process_str +'\n')
+    fileHandle.close()
+
+
+def process_to_perturb(cur_num):
+    print 'Process', cur_num
+    #start = cur_num * iteration_per_process + 1
+    #write_file(cur_num, start, iteration_per_process)
+    #command='xterm /bin/sh run.sh;'   
+    #os.system(command)
+
+if __name__ == '__main__':
+    os.system('./clean')
+    a=Process(target=process_to_perturb,args=(0,))
+    b=Process(target=process_to_perturb,args=(1,))
+    li=[a,b]
+
+    for element in li:
+        element.start()
+
+    for element in li:
+        element.join()    

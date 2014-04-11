@@ -1,0 +1,46 @@
+%by hhm,2 sep 2013
+%revised by lulu, 18 sep 2013
+%This guide aims to help you to calibrate DynaMIT with WSPSA.
+First of all, please make sure that you have installed octave, python and Gcc, and have read the "readmeForEstimateWh.txt" and "readmeForWSPSA.txt".
+
+Step 1: Generate Wh (Please cd to .../estimateWh)
+	1.1copy files listed in appendix1 to the folder "DynaMIT";
+	1.2copy files listed in appendix2 to the folder "initial";
+	1.3modify the file "configure.m" according to the notes in it;
+	1.4open octave in the terminal;
+	1.5run "generate_Perturbation.m" in octave;
+	1.6run "generate_Wh.m" in octave;
+	1.7get the file "wh.dat";
+	1.8copy the "wh.dat" to path .../WSPSA
+Step 2: Run WSPSA (Please cd to .../WSPSA)
+	2.1copy files in appendix1 to the folder "DynaMIT";
+	2.2copy files in appendix2 to the folder "initial";
+	2.3modify the file "configure.m" according to the notes in it;
+	2.4open octave in the terminal;
+	2.5run "main.m" in octave;
+Step 3: Check the RMSN results
+	3.1cd to .../WSPSA/results
+	3.2open "fn_RMSN_counts.dat" and "fn_RMSN_speed", in both of which column 1 stands for the sequence number "x" of sub-folders "globalx"(x=1,2,...) in folder "parameter_record", and column 2 stands for the RMSN value.
+	3.3find the best RMSN value according to your judgement and its corresponding sequence number "x" in column 1;
+	3.4cd to .../WSPSA/parameter_record/globalx, where "x" is the same as the one in step3.3;
+	3.5if you are satisfied with the best RMSN value, or the best RMSN value is not significantly smaller than the starting value, terminate the calibration process and use as the value for DynaMIT parameters the "OD_vector.dat", "cap_vector.dat", "spddsy_vector.dat" and "rt_choice.dat". Otherwise replace the files in appendix2 with "OD_vector.dat", "cap_vector.dat", "spddsy_vector.dat" and "rt_choice.dat", and then start from Step1 again.
+
+
+appendix1: files needs to be prepared for "DynaMIT"
+These files are stored in "backup_orignal/old_marinabay/" in both "WSPSA" and "estimateWh". (These files are for the case study in Marina Bay, Singapore. For new networks please prepare files for the specific network)
+These include all input files needed to run DynaMIT. See user-guide of DynaMIT for reference.
+
+appendix2: files needs to be prepared for "initial"
+These files are stored in "backup_orignal/old_marinabay/initial" in both "WSPSA" and "estimateWh".
+There are four dot dat files, the initial value of ods, capacity, speed-density and route choice paramters.
+	OD_vector.dat: line 1 is the number of ods pairs in one single interval, line 2 is the number of intervals, line 3 is the demand factor; line4~ is the value of od pairs.
+	cap_vector.dat: line 1 is the nubmer of segments; line2~ is the value of capacity.
+	spddsy_vector.dat: line1~ is the value of speed-density paramters.
+	rt_choice.dat: line1~ is the value of route choice model paramters.
+two dot dat files, the real-world sensor counts and the speed data.
+	sensor_counts.dat: line1~ is the real world sensor-counts data.
+	speeds_seed.dat: line1~ is the real world speed data.
+
+
+
+

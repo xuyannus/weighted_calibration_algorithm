@@ -1,0 +1,8 @@
+%This code will activate multi DynaMIT to do the estimation, it will save time.
+%By MaWei,22.08.2013
+%Recommend : set the number of process as the cores your computer owns.
+
+%configure
+no_process = 4;
+
+system('./start')

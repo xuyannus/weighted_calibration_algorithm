@@ -1,0 +1,272 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package weightmatrix2;
+
+/*Create by Lu Lu on August 28 2012 to create weight matrix for the SPSA calibration algorithm*/
+/*Files required include path topology file of DynaMIT and a sensor file that maps sensor ID to link ID*/
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
+/**
+ * 
+ * @author mitits
+ */
+public class WeightMatrix {
+
+	private static ArrayList<OD> ods = new ArrayList<OD>();
+	private static ArrayList<Sensor> sensors = new ArrayList<Sensor>();
+
+	public static void main(String args[]) {
+		try {
+			loadSensor();
+			getPath();
+			// for (int i=0; i<ods.size(); ++i) {
+			// System.out.println(ods.get(i).getPaths().length);
+			// }
+			outputMatrix();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// load sensor info from file
+	public static void loadSensor() throws IOException {
+		try {
+			FileReader fr = new FileReader("./sensors.dat");
+			BufferedReader br = new BufferedReader(fr);
+			String curLine = br.readLine();
+			while (curLine != null) {
+				String[] info = curLine.split(" |\t");
+				Sensor curSensor = new Sensor(info[2]);
+				
+				sensors.add(curSensor);
+				curLine = br.readLine();
+			}
+			br.close();
+			fr.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("No such file!");
+			e.printStackTrace();
+		}
+	}
+
+	// get path for the generated ODs
+	public static void getPath() {
+		try {
+			FileReader fr = new FileReader("./__pathTopology.dat");
+			BufferedReader br = new BufferedReader(fr);
+
+			String curLine = br.readLine();
+			while (curLine != null) {
+				// Parse the input line to extract OD and paths
+				String[] info = curLine.split(" ");
+				int len = info.length;
+				String od = info[3] + " " + info[4];
+				String[] paths = new String[len - 9];
+				for (int i = 6; i < len - 3; ++i) {
+					paths[i - 6] = info[i];
+				}
+
+				// Find the OD in the array
+				int nbrOfOD = ods.size();
+				boolean find = false;
+				for (int i = 0; i < nbrOfOD; ++i) {
+					OD curOD = ods.get(i);
+					if (curOD.isSameOD(od)) {
+						find = true;
+						if (paths.length < curOD.getPaths().length)
+							curOD.setPaths(paths);
+						// curOD.addPaths(paths);
+						break;
+					}
+				}
+				if (!find) {
+					OD curOD = new OD(od, paths);
+					ods.add(curOD);
+				}
+				curLine = br.readLine();
+			}
+
+			for (int i = 0; i < ods.size(); ++i) {
+				if (ods.get(i).getPaths() == null) {
+					ods.remove(i);
+				}
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("File path.dat not found!");
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	// output weight matrix
+	public static void outputMatrix() {
+//		int numOfInt = 91-24;
+		int numOfInt = 4;
+		int numOfOD = ods.size();
+		int numOfSen = sensors.size();
+		try {
+			FileWriter fw = new FileWriter("./wmatrix.dat");
+			BufferedWriter bw = new BufferedWriter(fw);
+			FileReader fr = new FileReader("./assign.dat");
+			BufferedReader br = new BufferedReader(fr);
+			FileReader fr2 = new FileReader("./fmatrix.dat2");
+			BufferedReader br2 = new BufferedReader(fr2);
+			String weight = null;
+
+			// to save time, create static table for sensor maping
+			String[] links = new String[numOfSen];
+			for (int i = 0; i < numOfSen; ++i) {
+				links[i] = sensors.get(i).getLink();
+			}
+
+			// Load auto-regressive factors
+			String read = br2.readLine();
+			read = br2.readLine();
+			String[] auto1 = read.split(" ");
+			read = br2.readLine();
+			String[] auto2 = read.split(" ");
+
+			String[][] hasWeight = new String[numOfOD][numOfSen];
+			for (int i = 0; i < numOfSen; ++i) {
+				String line = br.readLine();
+				String[] info = line.split(",");
+				int start = 0;
+
+				if (info.length == 4107) {
+					start = 1;
+				}
+				for (int j = start; j < start + numOfOD; ++j) {
+					if (Double.parseDouble(info[j]) != 0) {
+						hasWeight[j - start][i] = info[j];
+					} else {
+						hasWeight[j - start][i] = "0";
+					}
+				}
+			}
+
+			for (int i = 0; i < numOfInt; ++i) {
+				debug(i);
+				for (int j = 0; j < numOfOD; ++j) {
+					for (int k = 0; k < numOfInt; ++k) {
+						for (int l = 0; l < numOfSen; ++l) {
+							if (k == i) {
+								weight = hasWeight[j][l];
+								if (hasWeight[j][l] != "0") {
+									String curLine = Integer.toString(i * numOfOD + j + 1) + " " + Integer.toString(k * numOfSen + l + 1) + " " + weight;
+									bw.write(curLine);
+									bw.newLine();
+								}
+							}
+							if (k == i + 1) {
+								double f_d = Double.parseDouble(auto2[j]);
+								double weight_d = Double.parseDouble(hasWeight[j][l]);
+								weight_d = 1 - weight_d;
+								// weight_d *= f_d;
+								weight = Double.toString(weight_d);
+								if ((hasWeight[j][l] != "0") && (weight_d != 0)) {
+									String curLine = Integer.toString(i * numOfOD + j + 1) + " " + Integer.toString(k * numOfSen + l + 1) + " " + weight;
+									bw.write(curLine);
+									bw.newLine();
+								}
+							}
+							// if (k == i+2) {
+							// double f_d = Double.parseDouble(auto1[j]);
+							// double weight_d =
+							// Double.parseDouble(hasWeight[j][l]);
+							// if (weight_d <= 0.3)
+							// weight_d = weight_d;
+							// else
+							// weight_d = 0;
+							// weight = Double.toString(weight_d);
+							// if ((hasWeight[j][l] != "0")&& (weight_d != 0)) {
+							// String curLine = Integer.toString(i*numOfOD + j +
+							// 1)
+							// + " " + Integer.toString(k*numOfSen + l + 1)
+							// + " " + weight;
+							// bw.write(curLine);
+							// bw.newLine();
+							// }
+							// }
+						}
+					}
+
+				}
+			}
+
+			// boolean[][] hasWeight = new boolean[numOfOD][numOfSen];
+			// for (int i=0; i<numOfOD; ++i) {
+			// for (int j=0; j<numOfSen; ++j) {
+			// hasWeight[i][j] = ods.get(i).hasLink(links[j]);
+			// //hasWeight[i][j] = true;
+			// }
+			// }
+			//
+			//
+			// for (int i=0; i<numOfInt; ++i) {
+			// debug(i);
+			// for (int j=0; j<numOfOD; ++j) {
+			// for (int k=0; k<numOfInt; ++k) {
+			// for (int l=0; l<numOfSen; ++l) {
+			// if (k == i) {
+			// weight = "1";
+			// if (hasWeight[j][l]) {
+			// String curLine = Integer.toString(i*numOfOD + j + 1)
+			// + " " + Integer.toString(k*numOfSen + l + 1)
+			// + " " + weight;
+			// bw.write(curLine);
+			// bw.newLine();
+			// }
+			// }
+			// if (k == i+1) {
+			// weight = "1";
+			// if (hasWeight[j][l]) {
+			// String curLine = Integer.toString(i*numOfOD + j + 1)
+			// + " " + Integer.toString(k*numOfSen + l + 1)
+			// + " " + weight;
+			// bw.write(curLine);
+			// bw.newLine();
+			// }
+			// }
+			// }
+			// }
+			//
+			// }
+			// }
+			bw.close();
+			fw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	// output debug message
+	public static void debug(String mes) {
+		System.out.println(mes);
+	}
+
+	public static void debug(int mes) {
+		System.out.println(mes);
+	}
+
+	public static void debug(double mes) {
+		System.out.println(mes);
+	}
+
+	public static void debug(boolean mes) {
+		System.out.println(mes);
+	}
+
+}

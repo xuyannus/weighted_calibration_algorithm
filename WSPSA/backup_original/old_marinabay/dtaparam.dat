@@ -1,0 +1,111 @@
+[Files]
+
+InputDirectory  = "./" 
+OutputDirectory  =  "./output"
+TmpDirectory  =  "./temp"
+                                    // MITSIM is the only recognized value for
+                                    // now
+InputFormat     = "MITSIM"
+                                    // If no path is provided, InputDirectory
+                                    // is assumed 
+                                    // If the character '/' appears in the
+                                    // file name, InputDirectory is ignored.
+ 
+NetworkFile   = "network_marina.dat"
+SupplyParamFile = "supplyparam.dat"
+HistODFile    = "demand.dat" 
+HistTTFile    = "Linktime.dat"
+SocioEcoFile  = "socioEco.dat"
+BehParamFile  = "BehavioralParameters.dat" 
+IncidentFile  = "no_incident.dat"
+
+MitsimOdFile   = "demand.dat"
+
+MitsimSensorsFile = "sensor.dat"
+
+EquilibriumTTOutputFile = "eq_tt.out"
+
+DebugMode = 0
+
+WarningsMode = 0
+
+[Simulation]
+
+StartSimulation = 08:00:00
+StopSimulation  = 11:00:00
+
+OdInterval      = 15        // in minutes 
+HorizonLength   = 30 
+
+UpdateInterval  = 60               // in seconds
+AdvanceInterval = 5               // in seconds
+SupplyEpsilon   = 0.01
+
+PreSupplyCarlibration = 0
+HistoricalTableExtension = 30
+
+[Default]
+
+                                    // Default output capacity per lane
+OutputCapacity = 0.55               // Unit: veh/lane . sec
+                     
+FreeFlowSpeed  = 100.0               // Unit: km/hour
+
+JamDensity     =  0.075             // Unit: vehicles/lane-group . meter
+                                    // 0.075 ~= 120 veh/lane-mile   
+
+SpeedDensityAlpha = 1.1 
+SpeedDensityBeta  = 1.5
+
+LoaderInputCapacity = 5.0         // Unit: veh/sec
+                                    // 2200veh/hour
+                                    
+LoaderOutputCapacity = 5.0        // Unit: veh/sec
+                                    // 2200 veh/hour
+
+MaxEstIter = 1 
+
+MaxPredIter = 1
+
+MaxWaitForSensorTime = 90  // seconds (added by YW 10/19/2005)
+
+PurposeOfRun = 33          // 0  Realtime:
+                           // 1  Planning: BaseCase
+                           // 2  Planning: ATIS/VMS Predictive Scenario
+                           // 3  Planning: ATIS/VMS Instantaneous Scenario
+                           // 16 ClosedLoop: RealTime Closedloop version
+                           // 33 Planning: run supply only
+                           //
+                           // note: this is a very important parameter
+                           // especially if DynaMIT_P is being used.....
+                           //
+                           //
+                           // Beginning from 1/28/2005, For support of 
+                           // closedloop, in the real time version, this 
+                           // parameter is  automatically set to 0 in 
+                           // DynaMIT.cc *ONLY IF* it is not 16.
+
+FrequencyOfInfoUpdate = 900 // this is the time in seconds after which 
+                            // vms or other information is updated
+                            // important only if PurposeOfRun = 3
+                            // it is automatically set to -1 within the code
+                            // if purposeOfRun is not equal to 3.
+
+
+spFactor = 1.75 //1.75
+PathTopoFreewayBias = 0.80
+RouteChoiceFreewayBias = 0.5  
+RouteChoiceSwitchingInertia = 600.0
+ImpedanceTableCombinationFactor = 0.75
+Perturbations = 200
+
+
+
+[Controller]
+
+LostTimePerPhase = 2.0
+AllRedTime  = 1.0
+YellowChange = 4.0
+RandDelayDiscount = 0.25
+CapacityUpdate = 300
+CriterionQueueRatio = 0.15
